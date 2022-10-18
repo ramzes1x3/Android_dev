@@ -3,14 +3,10 @@ package com.example.firstproject;
 public class BookModel {
 	String bookName;
 	String bookInfo;
-	int bookImage;
-	int heartIcon;
 
-	public BookModel(String bookName, String bookInfo, int bookImage, int heartIcon) {
+	public BookModel(String bookName, String bookInfo) {
 		this.bookName = bookName;
 		this.bookInfo = bookInfo;
-		this.bookImage = bookImage;
-		this.heartIcon = heartIcon;
 	}
 
 	public String getBookName() {
@@ -19,13 +15,5 @@ public class BookModel {
 
 	public String getBookInfo() {
 		return bookInfo;
-	}
-
-	public int getBookImage() {
-		return bookImage;
-	}
-
-	public int getHeartIcon() {
-		return heartIcon;
 	}
 }

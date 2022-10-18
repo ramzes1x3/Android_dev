@@ -6,10 +6,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.firstproject.BookModel;
 import com.example.firstproject.R;
+import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BooksAdapter extends
 		RecyclerView.Adapter<BooksAdapter.BooksViewHolder> {
@@ -18,15 +35,12 @@ public class BooksAdapter extends
 	ArrayList<BookModel> bookModels;
 
 	public static class BooksViewHolder extends RecyclerView.ViewHolder {
-		public ImageView bookImage, heartIcon;
 		public TextView bookName, bookInfo;
 		public  BooksViewHolder(View itemView) {
 			super(itemView);
 
 			bookName = itemView.findViewById(R.id.book_name);
 			bookInfo = itemView.findViewById(R.id.about_book);
-			bookImage = itemView.findViewById(R.id.book_image);
-			heartIcon = itemView.findViewById(R.id.icon_add_favorite);
 		}
 	}
 
@@ -48,8 +62,12 @@ public class BooksAdapter extends
 	public void onBindViewHolder(BooksViewHolder holder, int position) {
 		holder.bookName.setText(bookModels.get(position).getBookName());
 		holder.bookInfo.setText(bookModels.get(position).getBookInfo());
-		holder.bookImage.setImageResource(bookModels.get(position).getBookImage());
-		holder.heartIcon.setImageResource(bookModels.get(position).getHeartIcon());
+		holder.bookName.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Navigation.findNavController(v).navigate(R.id.navigation_search);
+			}
+		});
 	}
 
 	@Override
