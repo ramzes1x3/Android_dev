@@ -20,19 +20,24 @@ import com.example.firstproject.BookModel;
 import com.example.firstproject.R;
 import com.example.firstproject.ui.adapters.BooksAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -61,7 +66,8 @@ public class HomeFragment extends Fragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-//		setUpBookModels();
+		setUpBookModels();
+
 		Thread fetch = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -80,24 +86,15 @@ public class HomeFragment extends Fragment {
 
 					inputStream.close();
 
-					if (response != null) {
-						JSONObject jsonObject = new JSONObject(String.valueOf(response));
-						JSONArray books = jsonObject.getJSONArray("books");
-						bookModels.clear();
+					Gson gson = new Gson();
+					Type listType = new TypeToken<List<BookModel>>(){}.getType();
+					List<BookModel> books = gson.fromJson(response.toString(), listType);
 
-						for (int i = 0; i < books.length(); i++) {
-							JSONObject booksJSON = books.getJSONObject(i);
-							String name = booksJSON.getString("name");
-							String description = booksJSON.getString("description");
-							bookModels.add(i, new BookModel(name, description));
-						}
-					}
+					Log.d("Response - books", response.toString());
 
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			}
