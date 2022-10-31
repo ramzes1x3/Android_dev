@@ -17,6 +17,8 @@ public class MainActivity2 extends AppCompatActivity {
 
 		setContentView(R.layout.activity_main2);
 
+		setTitle("Библиотека");
+
 		BottomNavigationView navView = findViewById(R.id.nav_view);
 
 		AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(

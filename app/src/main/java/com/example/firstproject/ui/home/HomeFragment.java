@@ -2,12 +2,7 @@ package com.example.firstproject.ui.home;
 
 import android.os.Bundle;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,41 +14,25 @@ import android.view.ViewGroup;
 import com.example.firstproject.BookModel;
 import com.example.firstproject.R;
 import com.example.firstproject.ui.adapters.BooksAdapter;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
 	private RecyclerView mRecyclerView;
 
 	ArrayList<BookModel> bookModels = new ArrayList<>();
-
-	private void setUpBookModels() {
-		String[] bookNames = getResources().getStringArray(R.array.book_names);
-		String[] bookInfo = getResources().getStringArray(R.array.book_info);
-
-		for (int i = 0; i < bookNames.length; i++) {
-			bookModels.add(new BookModel(bookNames[i],
-					bookInfo[i]));
-		}
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,8 +44,6 @@ public class HomeFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
-		setUpBookModels();
 
 		Thread fetch = new Thread(new Runnable() {
 			@Override
@@ -86,15 +63,30 @@ public class HomeFragment extends Fragment {
 
 					inputStream.close();
 
-					Gson gson = new Gson();
-					Type listType = new TypeToken<List<BookModel>>(){}.getType();
-					List<BookModel> books = gson.fromJson(response.toString(), listType);
+					if (response != null) {
+						JSONObject jsonObject = new JSONObject(String.valueOf(response));
+						JSONArray books = jsonObject.getJSONArray("books");
+						bookModels.clear();
 
-					Log.d("Response - books", response.toString());
+						for (int i = 0; i < books.length(); i++) {
+							JSONObject booksJSON = books.getJSONObject(i);
+							String author = booksJSON.getString("Author");
+							String genre = booksJSON.getString("Genre");
+							String name = booksJSON.getString("Name");
+							String publicationDate = booksJSON.getString("PublicationDate");
+							int rating = booksJSON.getInt("rating");
+
+							bookModels.add(i, new BookModel(author, genre, name, publicationDate, rating));
+						}
+					}
+
+					Log.d("Books", String.valueOf(response));
 
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			}
@@ -103,7 +95,7 @@ public class HomeFragment extends Fragment {
 		fetch.start();
 
 		try {
-			Thread.sleep(800);
+			fetch.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

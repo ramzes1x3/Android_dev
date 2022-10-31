@@ -1,6 +1,7 @@
 package com.example.firstproject.ui.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ public class BooksAdapter extends
 
 	public static class BooksViewHolder extends RecyclerView.ViewHolder {
 		public TextView bookName, bookInfo;
-		public  BooksViewHolder(View itemView) {
+		public BooksViewHolder(View itemView) {
 			super(itemView);
 
 			bookName = itemView.findViewById(R.id.book_name);
@@ -44,12 +45,26 @@ public class BooksAdapter extends
 
 	@Override
 	public void onBindViewHolder(BooksViewHolder holder, int position) {
-		holder.bookName.setText(bookModels.get(position).getBookName());
-		holder.bookInfo.setText(bookModels.get(position).getBookInfo());
+		BookModel book = (bookModels.get(position));
+		holder.bookName.setText(bookModels.get(position).getName());
+		holder.bookInfo.setText(bookModels.get(position).getAuthor());
 		holder.bookName.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Navigation.findNavController(v).navigate(R.id.navigation_search);
+				Bundle bundle = new Bundle();
+				String name = book.getName();
+				String author = book.getAuthor();
+				String genre = book.getGenre();
+				String publicationDate = book.getPublicationDate();
+				String rating = String.valueOf(book.getRating());
+
+				bundle.putString("name", name);
+				bundle.putString("author", author);
+				bundle.putString("genre", genre);
+				bundle.putString("publicationDate", publicationDate);
+				bundle.putString("rating", rating);
+
+				Navigation.findNavController(v).navigate(R.id.navigation_solo_book_item, bundle);
 			}
 		});
 	}

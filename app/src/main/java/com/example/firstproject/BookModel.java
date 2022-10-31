@@ -1,19 +1,38 @@
 package com.example.firstproject;
 
 public class BookModel {
-	String bookName;
-	String bookInfo;
+	String author;
+	String genre;
+	String name;
+	String publicationDate;
+	int rating;
 
-	public BookModel(String bookName, String bookInfo) {
-		this.bookName = bookName;
-		this.bookInfo = bookInfo;
+	public BookModel(String author, String genre, String name, String publicationDate, int rating) {
+		this.author = author;
+		this.genre = genre;
+		this.name = name;
+		this.publicationDate = publicationDate;
+		this.rating = rating;
 	}
 
-	public String getBookName() {
-		return bookName;
+	public String getAuthor() {
+		return author;
 	}
 
-	public String getBookInfo() {
-		return bookInfo;
+	public String getGenre() {
+		return genre;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getPublicationDate() {
+		return publicationDate;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+
 }

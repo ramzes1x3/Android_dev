@@ -34,10 +34,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_search"
-        android:name="com.example.firstproject.ui.search.SearchFragment"
+        android:id="@+id/navigation_solo_book_item"
+        android:name="com.example.firstproject.ui.soloBookItem.SoloBookItemFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_solo_book_item" >
         <action
             android:id="@+id/action_searchFragment_to_detailsFragment"
             app:destination="@id/navigation_details"
