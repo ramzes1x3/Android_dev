@@ -8,16 +8,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.firstproject.BookModel;
 import com.example.firstproject.R;
+import com.example.firstproject.db.Book;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class BooksAdapter extends
 		RecyclerView.Adapter<BooksAdapter.BooksViewHolder> {
 
 	Context context;
-	ArrayList<BookModel> bookModels;
+	List<Book> bookList;
 
 	public static class BooksViewHolder extends RecyclerView.ViewHolder {
 		public TextView bookName, bookInfo;
@@ -29,9 +29,9 @@ public class BooksAdapter extends
 		}
 	}
 
-	public BooksAdapter(Context context, ArrayList<BookModel> bookModels) {
+	public BooksAdapter(Context context, List<Book> bookList) {
 		this.context = context;
-		this.bookModels = bookModels;
+		this.bookList = bookList;
 	}
 
 	@Override
@@ -45,18 +45,20 @@ public class BooksAdapter extends
 
 	@Override
 	public void onBindViewHolder(BooksViewHolder holder, int position) {
-		BookModel book = (bookModels.get(position));
-		holder.bookName.setText(bookModels.get(position).getName());
-		holder.bookInfo.setText(bookModels.get(position).getAuthor());
+		Book book = (bookList.get(position));
+		holder.bookName.setText(bookList.get(position).nameBook);
+		holder.bookInfo.setText(bookList.get(position).author);
+
 		holder.bookName.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				Bundle bundle = new Bundle();
-				String name = book.getName();
-				String author = book.getAuthor();
-				String genre = book.getGenre();
-				String publicationDate = book.getPublicationDate();
-				String rating = String.valueOf(book.getRating());
+				String name = book.nameBook;
+				String author = book.author;
+				String genre = book.genre;
+				String publicationDate = book.publicationDate;
+				String rating = String.valueOf(book.rating);
 
 				bundle.putString("name", name);
 				bundle.putString("author", author);
@@ -70,6 +72,5 @@ public class BooksAdapter extends
 	}
 
 	@Override
-	public int getItemCount() { return bookModels.size(); }
-
+	public int getItemCount() { return this.bookList.size(); }
 }
