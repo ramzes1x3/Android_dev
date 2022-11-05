@@ -48,6 +48,7 @@ public class BooksAdapter extends
 		BookModel book = (bookModels.get(position));
 		holder.bookName.setText(bookModels.get(position).getName());
 		holder.bookInfo.setText(bookModels.get(position).getAuthor());
+
 		holder.bookName.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
