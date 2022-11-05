@@ -47,15 +47,17 @@ public class HomeFragment extends Fragment {
 			@Override
 			public void run() {
 				StringBuilder response = new StringBuilder();
+				URL url = null;
+				HttpURLConnection httpURLConnection = null;
 
 				try {
 					String currUrl = "https://api.npoint.io/9d9526bc5f8d6d1b81ab";
-					URL url = null;
+
 					url = new URL(currUrl);
 
-					HttpURLConnection httpURLConnection = null;
 					httpURLConnection = (HttpURLConnection) url.openConnection();
-					httpURLConnection.setRequestMethod("GET");
+
+					int g = httpURLConnection.getResponseCode();
 
 					if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 						BufferedReader input = new BufferedReader(
@@ -93,6 +95,8 @@ public class HomeFragment extends Fragment {
 					e.printStackTrace();
 				} catch (JSONException e) {
 					e.printStackTrace();
+				} finally {
+					httpURLConnection.disconnect();
 				}
 			}
 		});
