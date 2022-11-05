@@ -51,17 +51,26 @@ public class HomeFragment extends Fragment {
 				StringBuilder response = new StringBuilder();
 
 				try {
-					URL url = new URL("https://api.npoint.io/9d9526bc5f8d6d1b81ab");
-					HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-					InputStream inputStream = httpURLConnection.getInputStream();
-					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-					String line;
+					String currUrl = "https://api.npoint.io/9d9526bc5f8d6d1b81ab";
+					URL url = null;
+					url = new URL(currUrl);
 
-					while ((line = bufferedReader.readLine()) != null) {
-						response.append(line);
+					HttpURLConnection httpURLConnection = null;
+					httpURLConnection = (HttpURLConnection) url.openConnection();
+					httpURLConnection.setRequestMethod("GET");
+
+					if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+						BufferedReader input = new BufferedReader(
+								new InputStreamReader(httpURLConnection.getInputStream()), 8192);
+
+						String line = null;
+
+						while ((line = input.readLine()) != null) {
+							response.append(line);
+						}
+
+						input.close();
 					}
-
-					inputStream.close();
 
 					if (response != null) {
 						JSONObject jsonObject = new JSONObject(String.valueOf(response));

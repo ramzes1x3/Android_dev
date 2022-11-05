@@ -45,26 +45,12 @@ public class BooksAdapter extends
 
 	@Override
 	public void onBindViewHolder(BooksViewHolder holder, int position) {
-		BookModel book = (bookModels.get(position));
 		holder.bookName.setText(bookModels.get(position).getName());
 		holder.bookInfo.setText(bookModels.get(position).getAuthor());
 		holder.bookName.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Bundle bundle = new Bundle();
-				String name = book.getName();
-				String author = book.getAuthor();
-				String genre = book.getGenre();
-				String publicationDate = book.getPublicationDate();
-				String rating = String.valueOf(book.getRating());
-
-				bundle.putString("name", name);
-				bundle.putString("author", author);
-				bundle.putString("genre", genre);
-				bundle.putString("publicationDate", publicationDate);
-				bundle.putString("rating", rating);
-
-				Navigation.findNavController(v).navigate(R.id.navigation_solo_book_item, bundle);
+				Navigation.findNavController(v).navigate(R.id.navigation_solo_book_item);
 			}
 		});
 	}
