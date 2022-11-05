@@ -35,4 +35,5 @@ public class BookModel {
 		return rating;
 	}
 
+	public String getBookToString() { return String.valueOf("Book - " + "author:" + this.author + " " + "genre:" + this.genre +  " name:" + this.name +  " publicationDate:" + this.publicationDate +  " rating:" + this.rating); }
 }

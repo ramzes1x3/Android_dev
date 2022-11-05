@@ -80,7 +80,9 @@ public class HomeFragment extends Fragment {
 						}
 					}
 
-					Log.d("Books", String.valueOf(response));
+					for (int i = 0; i < bookModels.size(); i++) {
+						System.out.println(bookModels.get(i).getBookToString());
+					}
 
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
