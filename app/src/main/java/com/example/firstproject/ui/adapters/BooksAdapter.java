@@ -1,7 +1,9 @@
 package com.example.firstproject.ui.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +23,14 @@ public class BooksAdapter extends
 
 	public static class BooksViewHolder extends RecyclerView.ViewHolder {
 		public TextView bookName, bookInfo;
+		public View book;
+
 		public BooksViewHolder(View itemView) {
 			super(itemView);
 
 			bookName = itemView.findViewById(R.id.book_name);
 			bookInfo = itemView.findViewById(R.id.about_book);
+			book = itemView.findViewById(R.id.book_card);
 		}
 	}
 
@@ -49,7 +54,7 @@ public class BooksAdapter extends
 		holder.bookName.setText(bookList.get(position).nameBook);
 		holder.bookInfo.setText(bookList.get(position).author);
 
-		holder.bookName.setOnClickListener(new View.OnClickListener() {
+		holder.book.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
@@ -67,6 +72,16 @@ public class BooksAdapter extends
 				bundle.putString("rating", rating);
 
 				Navigation.findNavController(v).navigate(R.id.navigation_solo_book_item, bundle);
+			}
+		});
+
+		holder.book.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+				Log.i("Click", "on long item click");
+				return true;
 			}
 		});
 	}

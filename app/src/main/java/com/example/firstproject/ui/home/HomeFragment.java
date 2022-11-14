@@ -52,24 +52,24 @@ public class HomeFragment extends Fragment {
 		super.onViewCreated(view, savedInstanceState);
 
 		AppDatabase db = AppDatabase.getInstance(this.getContext());
-		db.clearAllTables();
+
 		BookDao bookDao = db.bookDao();
 		Book dbBook = new Book();
 
 		UserDao userDao = db.userDao();
 		User dbUser = new User();
 
-		String[] emails = getResources().getStringArray(R.array.emails);
-		String[] passwords = getResources().getStringArray(R.array.passwords);
-
-		for (int i = 0; i < emails.length; i++) {
-			dbUser.email = emails[i];
-			dbUser.password = passwords[i];
-			userDao.insert(dbUser);
-		}
-
 		UserFavoriteBooksDao userFavoriteBooksDao = db.userFavoriteBooksDao();
 		UserFavoriteBooks userFavoriteBooks = new UserFavoriteBooks();
+
+//		String[] emails = getResources().getStringArray(R.array.emails);
+//		String[] passwords = getResources().getStringArray(R.array.passwords);
+//
+//		for (int i = 0; i < emails.length; i++) {
+//			dbUser.email = emails[i];
+//			dbUser.password = passwords[i];
+//			userDao.insert(dbUser);
+//		}
 
 		Thread fetch = new Thread(new Runnable() {
 			@Override
@@ -110,12 +110,12 @@ public class HomeFragment extends Fragment {
 							String publicationDate = booksJSON.getString("PublicationDate");
 							int rating = booksJSON.getInt("rating");
 
-							dbBook.author = author;
-							dbBook.genre = genre;
-							dbBook.nameBook = name;
-							dbBook.publicationDate = publicationDate;
-							dbBook.rating = rating;
-							bookDao.insert(dbBook);
+//							dbBook.author = author;
+//							dbBook.genre = genre;
+//							dbBook.nameBook = name;
+//							dbBook.publicationDate = publicationDate;
+//							dbBook.rating = rating;
+//							bookDao.insert(dbBook);
 						}
 
 						bookList = db.bookDao().getAll();

@@ -8,6 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.firstproject.db.AppDatabase;
+import com.example.firstproject.db.User;
+import com.example.firstproject.db.UserDao;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 	Button signInButton;
 	Intent mainActivity2;
@@ -15,11 +21,16 @@ public class MainActivity extends AppCompatActivity {
 	EditText inputUserEmail;
 	String password;
 	String email;
+	List<User> userList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		AppDatabase db = AppDatabase.getInstance(this);
+		UserDao userDao = db.userDao();
+		userList = userDao.getAll();
 
 		signInButton = findViewById(R.id.signInButton);
 		inputUserPassword = findViewById(R.id.inputUserPassword);
@@ -31,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
 			int emailIndexFound = findEmail(email);
 			if (emailIndexFound != -1) {
-				if (isPasswordCorrect(emailIndexFound)) {
+				if (isPasswordCorrect(emailIndexFound, password)) {
 					mainActivity2 = new Intent(this, MainActivity2.class);
 					startActivity(mainActivity2);
 				} else {
@@ -44,18 +55,17 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private int findEmail(String emailSearch) {
-		String[] emails = getResources().getStringArray(R.array.emails);
 
-		for (int i = 0; i < emails.length; i++) {
-			if (emails[i].equals(emailSearch))
+		for (int i = 0; i < userList.size(); i++) {
+			if (userList.get(i).email.equals(emailSearch)) {
 				return i;
+			};
 		}
+
 		return -1;
 	}
 
-	private boolean isPasswordCorrect(int emailIndex) {
-		String[] passwords = getResources().getStringArray(R.array.passwords);
-
-		return passwords[emailIndex].equals(password);
+	private boolean isPasswordCorrect(int emailIndexFound, String inputUserPassword) {
+		return userList.get(emailIndexFound).password.equals(inputUserPassword);
 	}
 }
