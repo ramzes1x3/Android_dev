@@ -13,6 +13,9 @@ import java.util.List;
 		@Query("SELECT * FROM book")
 		List<Book> getAll();
 
+		@Query("SELECT * FROM book WHERE book.id=:bookId")
+		Book getBookById(long bookId);
+
 		@Insert(onConflict = OnConflictStrategy.REPLACE)
 		void insert(Book... books);
 	}

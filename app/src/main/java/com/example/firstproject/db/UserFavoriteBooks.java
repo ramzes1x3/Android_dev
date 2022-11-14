@@ -10,8 +10,8 @@ public class UserFavoriteBooks {
 	public long id;
 
 	@ColumnInfo(name = "user_id")
-	public String userId;
+	public long userId;
 
 	@ColumnInfo(name = "book_id")
-	public String bookId;
+	public long bookId;
 }

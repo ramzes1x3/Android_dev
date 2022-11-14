@@ -2,6 +2,7 @@ package com.example.firstproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 	String email;
 	List<User> userList;
 
+	@SuppressLint("WrongThread")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,6 +32,17 @@ public class MainActivity extends AppCompatActivity {
 
 		AppDatabase db = AppDatabase.getInstance(this);
 		UserDao userDao = db.userDao();
+
+//		User dbUser = new User();
+//		String[] emails = getResources().getStringArray(R.array.emails);
+//		String[] passwords = getResources().getStringArray(R.array.passwords);
+//
+//		for (int i = 0; i < emails.length; i++) {
+//			dbUser.email = emails[i];
+//			dbUser.password = passwords[i];
+//			userDao.insert(dbUser);
+//		}
+
 		userList = userDao.getAll();
 
 		signInButton = findViewById(R.id.signInButton);
@@ -44,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 			if (emailIndexFound != -1) {
 				if (isPasswordCorrect(emailIndexFound, password)) {
 					mainActivity2 = new Intent(this, MainActivity2.class);
+					mainActivity2.putExtra("userEmail", email);
+
 					startActivity(mainActivity2);
 				} else {
 					Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show();

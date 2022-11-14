@@ -2,6 +2,7 @@ package com.example.firstproject.ui.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,8 +11,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.firstproject.MainActivity2;
 import com.example.firstproject.R;
+import com.example.firstproject.db.AppDatabase;
 import com.example.firstproject.db.Book;
+import com.example.firstproject.db.User;
+import com.example.firstproject.db.UserFavoriteBooks;
 
 import java.util.List;
 
@@ -79,8 +85,51 @@ public class BooksAdapter extends
 			@Override
 			public boolean onLongClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				AppDatabase db = AppDatabase.getInstance(context);
+				String userEmail = MainActivity2.userEmail;
+				User user = db.userDao().getUserByEmail(userEmail);
+				List<UserFavoriteBooks> userFavoriteBooks = db.userFavoriteBooksDao().getUserFavoriteBooksById(user.id);
+				UserFavoriteBooks userFavoriteBook = new UserFavoriteBooks();
 
-				Log.i("Click", "on long item click");
+				builder.setCancelable(true)
+						.setMessage(book.nameBook)
+						.setTitle(book.author)
+						.setNegativeButton("Убрать книгу из избранного", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+
+								for(int i =0; i < userFavoriteBooks.size(); i++) {
+									if (userFavoriteBooks.get(i).bookId == book.id) {
+										db.userFavoriteBooksDao().delete(userFavoriteBooks.get(i));
+									}
+								}
+							}
+						})
+						.setPositiveButton("Добавить книгу в избранное", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								for(int i = 0; i < userFavoriteBooks.size(); i++) {
+									if (userFavoriteBooks.get(i).bookId == book.id) {
+										return;
+									}
+								}
+
+								userFavoriteBook.userId = user.id;
+								userFavoriteBook.bookId = book.id;
+								db.userFavoriteBooksDao().insert(userFavoriteBook);
+							}
+						})
+						.setNeutralButton("Выйти", new
+								DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										Log.i("AlertDialog", "Выйти");
+									}
+								}).setView(R.layout.alert_dialog_view);
+
+				AlertDialog alertDialog = builder.create();
+
+				alertDialog.show();
 				return true;
 			}
 		});

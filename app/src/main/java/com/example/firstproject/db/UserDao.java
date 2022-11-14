@@ -12,6 +12,9 @@ import java.util.List;
 		@Query("SELECT * FROM user")
 		List<User> getAll();
 
+		@Query("SELECT * FROM user WHERE user.email =:userEmail")
+		User getUserByEmail(String userEmail);
+
 		@Insert(onConflict = OnConflictStrategy.REPLACE)
 		void insert(User... users);
 	}
