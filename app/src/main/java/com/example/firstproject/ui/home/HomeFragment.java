@@ -1,5 +1,6 @@
 package com.example.firstproject.ui.home;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,10 @@ import com.example.firstproject.R;
 import com.example.firstproject.db.AppDatabase;
 import com.example.firstproject.db.Book;
 import com.example.firstproject.db.BookDao;
+import com.example.firstproject.db.User;
+import com.example.firstproject.db.UserDao;
+import com.example.firstproject.db.UserFavoriteBooks;
+import com.example.firstproject.db.UserFavoriteBooksDao;
 import com.example.firstproject.ui.adapters.BooksAdapter;
 
 import org.json.JSONArray;
@@ -40,13 +46,30 @@ public class HomeFragment extends Fragment {
 		return view;
 	}
 
+	@SuppressLint("WrongThread")
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
 		AppDatabase db = AppDatabase.getInstance(this.getContext());
+		db.clearAllTables();
 		BookDao bookDao = db.bookDao();
 		Book dbBook = new Book();
+
+		UserDao userDao = db.userDao();
+		User dbUser = new User();
+
+		String[] emails = getResources().getStringArray(R.array.emails);
+		String[] passwords = getResources().getStringArray(R.array.passwords);
+
+		for (int i = 0; i < emails.length; i++) {
+			dbUser.email = emails[i];
+			dbUser.password = passwords[i];
+			userDao.insert(dbUser);
+		}
+
+		UserFavoriteBooksDao userFavoriteBooksDao = db.userFavoriteBooksDao();
+		UserFavoriteBooks userFavoriteBooks = new UserFavoriteBooks();
 
 		Thread fetch = new Thread(new Runnable() {
 			@Override
